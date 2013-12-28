@@ -3,39 +3,36 @@
  */
 function menuState() {
     "use strict";
-    var that = Object.create(fmState());
-
-    var startButton = null;
-    var music = null;
-    var sound = null;
+    var that = Object.create(FM.state()),
+        startButton = null,
+        music = null,
+        sound = null;
 
     that.init = function () {
         Object.getPrototypeOf(that).init();
 
-        var howToPlay = fmText(200, 250, 10, "Click on the forms and see what you can do with them");
-        howToPlay.setFormat('#fff', '30px sans-serif', 'middle');
+        var howToPlay = FM.gameObject(10);
+        FM.spatialComponent(200, 250, howToPlay);
+        var text = FM.textRendererComponent("Click on the forms and see what you can do with them", howToPlay);
+        text.setFormat('#fff', '30px sans-serif', 'middle');
         that.add(howToPlay);
 
-        startButton = fmText(fmParameters.screenWidth / 2 - 70, 512, 10, "Click to play");
-        startButton.setFormat('#fff', '30px sans-serif', 'middle');
+        startButton = FM.gameObject(10);
+        FM.spatialComponent(FM.game.getScreenWidth() / 2 - 70, 512, startButton);
+        text = FM.textRendererComponent("Click to play", startButton);
+        text.setFormat('#fff', '30px sans-serif', 'middle');
         that.add(startButton);
 
-        music = fmSound(0, 0, "music");
-        music.play(1, 0);
-        sound = music.components[fmComponentTypes.sound].getSound();
+        music = FM.gameObject(0, 0, "music");
+        var audio = FM.audioComponent(music);
+        audio.addSound(FM.assetManager.getAssetByName("music"));
+        audio.play("music", 0.5, true);
     };
 
     that.update = function (game) {
         Object.getPrototypeOf(that).update(game);
-        if (game.isMouseClicked()) {
-            var newState = null;
-            game.switchState(newState = playState());
-            newState.setMusic(sound);
-            //that.destroy();
-        }
-
-        if (sound.currentTime >= sound.duration - 1) {
-            sound.currentTime = 0;
+        if (FM.game.isMouseClicked()) {
+            FM.game.switchState(playState());
         }
     };
 
