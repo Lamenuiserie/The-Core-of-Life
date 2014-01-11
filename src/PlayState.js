@@ -230,6 +230,7 @@ function playState() {
                     && mouseY >= formY && mouseY <= formY + formHeight) {
                     if (!formFollowing) {
                         form.physicComponent.velocity.reset(0, 0);
+                        that.centerCameraOn(form);
                         that.follow(form, FM.game.getScreenWidth() / 2, FM.game.getScreenHeight() / 2, true);
                         form.followPlayer = true;
                         formFollowing = form;
@@ -252,6 +253,7 @@ function playState() {
                         that.unFollow();
                         formFollowing.followPlayer = false;
                         form.physicComponent.velocity.reset(0, 0);
+                        that.centerCameraOn(form);
                         that.follow(form, FM.game.getScreenWidth() / 2, FM.game.getScreenHeight() / 2, true);
                         form.followPlayer = true;
                         formFollowing = form;
@@ -260,45 +262,11 @@ function playState() {
                 }
             }
         }
-        
-        //Hide forms going outside the world
-        var i = 0;
-        for (i = 0; i < lifeForms.length; i++) {
-            var form = lifeForms[i];
-            var formSpatial = form.components[FM.componentTypes.SPATIAL];
-            var xPosition = formSpatial.position.x;
-            var yPosition = formSpatial.position.y;
-            var formRenderer = form.components[FM.componentTypes.RENDERER];
-            var formWidth = formRenderer.getWidth();
-            var formHeight = formRenderer.getHeight();
 
-            if (xPosition + formWidth < that.bounds.x || yPosition + formHeight < that.bounds.y
-                || xPosition > that.bounds.x + that.width || yPosition > that.bounds.y + that.bounds.height) {
-                form.hide();
-            } else {
-                form.show();
-            }
-        }
-
+        //Handle interaction between life forms
         var i = 0, j = 0;
         for (i = 0; i < lifeForms.length; i++) {
             var form = lifeForms[i];
-            var formSpatial = form.components[FM.componentTypes.SPATIAL];
-            var xPosition = formSpatial.position.x;
-            var yPosition = formSpatial.position.y;
-            var formRenderer = form.components[FM.componentTypes.RENDERER];
-            var formWidth = formRenderer.getWidth();
-            var formHeight = formRenderer.getHeight();
-
-            //Hide forms going outside the world
-            if (xPosition + formWidth < that.bounds.x || yPosition + formHeight < that.bounds.y
-                || xPosition > that.bounds.x + that.width || yPosition > that.bounds.y + that.bounds.height) {
-                form.visible = false;
-            } else {
-                form.visible = true;
-            }
-
-            //Handle interaction between life forms
             for (j = 0; j < lifeForms3.length; j++) {
                 var form3 = lifeForms3[j];
                 if (form.physicComponent.overlapsWithObject(form3.physicComponent)) {

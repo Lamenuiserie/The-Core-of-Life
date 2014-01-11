@@ -68,17 +68,17 @@ function lifeForm(x, y, imageName, formType) {
         var xPosition = that.spatial.position.x, yPosition = that.spatial.position.y;
 
         //Spawn at the opposite edge of the world
-        if (xPosition + width <= that.bounds.x) {
-            that.spatial.position.x = that.bounds.x + that.bounds.width;
+        if (xPosition + width / 2 <= that.bounds.x) {
+            that.spatial.position.x = that.bounds.x + that.bounds.width - width / 2;
         }
-        else if (xPosition > that.bounds.x + that.bounds.width) {
-            that.spatial.position.x = that.bounds.x - width;
+        else if (xPosition + width / 2 > that.bounds.x + that.bounds.width) {
+            that.spatial.position.x = that.bounds.x - width / 2;
         }
-        if (yPosition + height <= that.bounds.y) {
-            that.spatial.position.y = that.bounds.y + that.bounds.height;
+        if (yPosition + height / 2 <= that.bounds.y) {
+            that.spatial.position.y = that.bounds.y + that.bounds.height - height / 2;
         }
-        else if (yPosition > that.bounds.y + that.bounds.height) {
-            that.spatial.position.y = that.bounds.y - height;
+        else if (yPosition + height / 2 > that.bounds.y + that.bounds.height) {
+            that.spatial.position.y = that.bounds.y - height / 2;
         }
 
         if (that.followPlayer) {
