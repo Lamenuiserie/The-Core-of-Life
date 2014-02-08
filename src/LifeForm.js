@@ -1,28 +1,29 @@
+/*globals FM */
 /*
  * @autho Simon Chauvin
  */
 function lifeForm(x, y, imageName, formType) {
     "use strict";
-    var that = FM.gameObject(10);
-    that.spatial = FM.spatialComponent(x, y, that);
+    var that = new FM.GameObject(10);
+    that.spatial = that.addComponent(new FM.SpatialComponent(x, y, that));
     that.type = formType;
 
     if (that.type === 1) {
-        that.renderer = FM.animatedSpriteRendererComponent(FM.assetManager.getAssetByName(imageName), 200, 200, that);
+        that.renderer = that.addComponent(new FM.AnimatedSpriteRendererComponent(FM.AssetManager.getAssetByName(imageName), 200, 200, that));
         that.renderer.addAnimation("default", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35], 30, true);
         that.renderer.play("default");
     } else if (that.type === 2) {
-        that.renderer = FM.animatedSpriteRendererComponent(FM.assetManager.getAssetByName(imageName), 200, 200, that);
+        that.renderer = that.addComponent(new FM.AnimatedSpriteRendererComponent(FM.AssetManager.getAssetByName(imageName), 200, 200, that));
         that.renderer.addAnimation("default", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35], 15, true);
         that.renderer.play("default");
     } else if (that.type === 3) {
-        that.renderer = FM.animatedSpriteRendererComponent(FM.assetManager.getAssetByName(imageName), 250, 218, that);
+        that.renderer = that.addComponent(new FM.AnimatedSpriteRendererComponent(FM.AssetManager.getAssetByName(imageName), 250, 218, that));
         that.renderer.addAnimation("default", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14], 15, true);
         that.renderer.addAnimation("die", [15,16,17,18,19,20,21], 15, false);
         that.renderer.addAnimation("revive", [22,23,24,25,26,27,1], 15, false);
         that.renderer.play("default");
     } else if (that.type === 4) {
-        that.renderer = FM.animatedSpriteRendererComponent(FM.assetManager.getAssetByName(imageName), 250, 236, that);
+        that.renderer = that.addComponent(new FM.AnimatedSpriteRendererComponent(FM.AssetManager.getAssetByName(imageName), 250, 236, that));
         that.renderer.addAnimation("default", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25], 1, true);
         that.renderer.addAnimation("die", [26,27,28,29,30,31,32,34,35,36,37,38,39,40,41,42,43], 15, false);
         that.renderer.addAnimation("revive", [44,45,46,47,48,49,50,51,52,53,54,55,56,57,58], 15, false);
@@ -32,20 +33,28 @@ function lifeForm(x, y, imageName, formType) {
     var width = that.renderer.getWidth();
     var height = that.renderer.getHeight();
 
-    that.physicComponent = FM.aabbComponent(width - 20, height - 20, that);
+    that.physicComponent = that.addComponent(new FM.AabbComponent(width - 20, height - 20, that));
     var positive = Math.random();
     var xVelocity = 1;
     var yVelocity = 1;
+    var value = Math.random();
+    while(value < 0.3) {
+        value = Math.random();
+    }
     if (positive > 0.5) {
-        xVelocity = Math.random() * 70;
+        xVelocity = value * 100;
     } else {
-        xVelocity = -Math.random() * 70;
+        xVelocity = -value * 100;
+    }
+    value = Math.random();
+    while(value < 0.3) {
+        value = Math.random();
     }
     positive = Math.random();
     if (positive > 0.5) {
-        yVelocity = Math.random() * 70;
+        yVelocity = value * 100;
     } else {
-        yVelocity = -Math.random() * 70;
+        yVelocity = -value * 100;
     }
     that.physicComponent.velocity.reset(xVelocity, yVelocity);
 
@@ -82,7 +91,7 @@ function lifeForm(x, y, imageName, formType) {
         }
 
         if (that.followPlayer) {
-            var areaToReach = FM.rectangle(FM.game.getMouseX(), FM.game.getMouseY(), 10, 10);
+            var areaToReach = new FM.Rectangle(FM.Game.getMouseX(), FM.Game.getMouseY(), 10, 10);
             var distanceX = Math.abs(that.spatial.position.x + that.renderer.getWidth() / 2 - areaToReach.x + areaToReach.width / 2);
             var distanceY = Math.abs(that.spatial.position.y + that.renderer.getHeight() / 2 - areaToReach.y + areaToReach.height / 2);
             

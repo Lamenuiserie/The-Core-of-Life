@@ -7,7 +7,7 @@
     <!--
     	{FM.js(Engine);}
     -->
-    <script type="text/javascript" src="lib/fm/fmjsengine-concat.js"></script>
+    <script type="text/javascript" src="lib/fm/fmjsengine-min.js"></script>
     <!--
     	The Core of Life entry point.
     -->
@@ -21,13 +21,15 @@ FM.includeJsFile("src/parameters.js");
 var start = function () {
     "use strict";
     //Add assets
-    var assetManager = FM.assetManager,
-	    param = FM.parameters;
+    var assetManager = FM.AssetManager,
+	    param = FM.Parameters;
     //Debug mode
     //param.debug = true;
 
     //Audio
+    assetManager.addAsset("music", param.AUDIO, "assets/sfx/music.wav");
     assetManager.addAsset("music", param.AUDIO, "assets/sfx/music.ogg");
+    assetManager.addAsset("music", param.AUDIO, "assets/sfx/music.mp3");
 
     //Images
     assetManager.addAsset("background", param.IMAGE, "assets/gfx/background.png");
@@ -40,11 +42,8 @@ var start = function () {
     //Load assets
     assetManager.loadAssets();
 
-    //Specify the folder in which you put {FM.js(engine);}
-    param.libraryDirectory = "lib";
-
     //Start game
-    FM.game.run("canvas", "The Core of Life", 1024, 768, menuState);
+    FM.Game.run("canvas", "The Core of Life", 1024, 768, new menuState());
 };
 
 window.addEventListener("load", start, false);

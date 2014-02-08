@@ -1,3 +1,4 @@
+/*globals FM */
 /**
  * @author Simon Chauvin
  */
